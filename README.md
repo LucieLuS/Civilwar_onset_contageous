@@ -28,4 +28,4 @@ After filtering: from 2010-2020, in the African region, we have N=205.
 Keyword: Congo Civil War
 Date range: 3/18/2013 - 4/18/2013
 
-Newsbanks's results: South Africa (29), Kenya (5), Zimbabwe (3), Uganda (2). Notice there is no Congo's news article here!
+Newsbanks's results: South Africa (29), Kenya (5), Zimbabwe (3), Uganda (2). Notice there is no Congo's news article here! I checked Congo's collection starts later than 2013.
