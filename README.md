@@ -28,4 +28,4 @@ After filtering: from 2010-2020, in the African region, we have N=205.
 Keyword: Congo Civil War
 Date range: 3/18/2013 - 4/18/2013
 
-Newsbanks's results: South Africa (29), Kenya (5), Zimbabwe (3), Uganda (2). Notice there is no Congo's news article here! I checked Congo's collection starts later than 2013.
+Newsbanks's results: South Africa (29), Kenya (5), Zimbabwe (3), Uganda (2). Notice there is no Congo's news article here! I checked Congo's collection starts later than 2013. Then I identified "Le Potentiel" is the leading daily newspaper in DR Congo. No news about the civil war in 2013. Only "La course à l'OIF - L'économie est au cÅ“ur des préoccupations des Etats [analysis]" that show up in both Nexis Unis and Newsbank. 
