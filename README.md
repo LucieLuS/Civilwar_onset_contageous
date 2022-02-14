@@ -1,7 +1,7 @@
 # Civilwar_onset_contageous
 
 ## Civil war dataset:
-UCDP UCDP/PRIO Armed Conflict Dataset Codebook:  UCDP datasets have always relied on the 25 deaths in a calendar year threshold for inclusion in its datasets. A link to its codebook:chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/viewer.html?pdfurl=https%3A%2F%2Fucdp.uu.se%2Fdownloads%2Fucdpprio%2Fucdp-prio-acd-211.pdf&clen=292699&chunk=true
+UCDP UCDP/PRIO Armed Conflict Dataset Codebook:  UCDP datasets have always relied on the 25 deaths in a calendar year threshold for inclusion in its datasets. A link to its codebook: chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/viewer.html?pdfurl=https%3A%2F%2Fucdp.uu.se%2Fdownloads%2Fucdpprio%2Fucdp-prio-acd-211.pdf&clen=292699&chunk=true
 
 
 After filtering: from 2010-2020, in the African region, we have N=205.
@@ -21,4 +21,4 @@ After filtering: from 2010-2020, in the African region, we have N=205.
 - Nexis Unis: https://advance-lexis-com.proxy2.library.illinois.edu/bisacademicresearchhome/?pdmfid=1516831&crid=35473aab-db2c-40f1-8501-d5043ca5e0d8&ecomp=xb3nk&prid=8d2358d0-48d4-4a74-92bc-1712791298da
 - Access World Newsbank: https://infoweb-newsbank-com.proxy2.library.illinois.edu/apps/news/browse-multi?p=AWNB&action=browse
 
-**Newsbank contains much more African local news than Nexis Unis. However, news in South Africa and Kenya are over-represented.
+**Newsbank contains much more African local news than Nexis Unis. However, news in South Africa and Kenya are over-represented.**
