@@ -22,3 +22,10 @@ After filtering: from 2010-2020, in the African region, we have N=205.
 - Access World Newsbank: https://infoweb-newsbank-com.proxy2.library.illinois.edu/apps/news/browse-multi?p=AWNB&action=browse
 
 **Newsbank contains much more African local news than Nexis Unis. However, news in South Africa and Kenya are over-represented.**
+
+
+## Example
+Keyword: Congo Civil War
+Date range: 3/18/2013 - 4/18/2013
+
+Newsbanks's results: South Africa (29), Kenya (5), Zimbabwe (3), Uganda (2). Notice there is no Congo's news article here!
