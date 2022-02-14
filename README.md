@@ -16,3 +16,9 @@ After filtering: from 2010-2020, in the African region, we have N=205.
 - a little hesitation there: worry about state capacity.
 - a way of diffusion: ethnic ties
 
+
+## Where to find news articles?
+- Nexis Unis: https://advance-lexis-com.proxy2.library.illinois.edu/bisacademicresearchhome/?pdmfid=1516831&crid=35473aab-db2c-40f1-8501-d5043ca5e0d8&ecomp=xb3nk&prid=8d2358d0-48d4-4a74-92bc-1712791298da
+- Access World Newsbank: https://infoweb-newsbank-com.proxy2.library.illinois.edu/apps/news/browse-multi?p=AWNB&action=browse
+
+**Newsbank contains much more African local news than Nexis Unis. However, news in South Africa and Kenya are over-represented.
