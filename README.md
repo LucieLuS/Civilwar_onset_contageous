@@ -7,3 +7,12 @@ UCDP UCDP/PRIO Armed Conflict Dataset Codebook:  UCDP datasets have always relie
 After filtering: from 2010-2020, in the African region, we have N=205.
 
 
+## Unit of analysis:
+- event
+- maybe safer to look at the news reporting of all the other countries' civil war on the continent
+
+
+## What does it mean that when news report has positive tone and high volume?
+- a little hesitation there: worry about state capacity.
+- a way of diffusion: ethnic ties
+
