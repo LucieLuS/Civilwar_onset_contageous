@@ -34,3 +34,5 @@ Newsbanks's results: South Africa (29), Kenya (5), Zimbabwe (3), Uganda (2). Not
 Then I identified "Le Potentiel" is the leading daily newspaper in DR Congo. No news about the civil war in 2013. Only "La course à l'OIF - L'économie est au cÅ“ur des préoccupations des Etats [analysis]" that show up in both Nexis Unis and Newsbank. 
 
 On Nexis Unis, if I search the territory's name "Katanga" on Nexis Unis withiin the newspaper "Le Potentiel," 78 results show up. If I search "Katanga AND guerre," 17 results -- much better. Then we need to use google translation.
+
+**Takeway**: Lanauge barrier is a thing -- we need to modify our keywords search. Nexis Unis has more complete collection, but we need to identify the leading journals of each country. Newsbank will return more local African news if we search the key terms, but the collection is not complete. 
