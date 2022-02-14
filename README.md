@@ -29,4 +29,8 @@ Keyword: Congo Civil War
 Date range: 3/18/2013 - 4/18/2013
 Location: Africa
 
-Newsbanks's results: South Africa (29), Kenya (5), Zimbabwe (3), Uganda (2). Notice there is no Congo's news article here! I checked Congo's collection starts later than 2013. Then I identified "Le Potentiel" is the leading daily newspaper in DR Congo. No news about the civil war in 2013. Only "La course à l'OIF - L'économie est au cÅ“ur des préoccupations des Etats [analysis]" that show up in both Nexis Unis and Newsbank. If I search the territory's name (Katanga) on Nexis Unis in "Le Potentiel," 78 results show up. Language barrier is a thing.
+Newsbanks's results: South Africa (29), Kenya (5), Zimbabwe (3), Uganda (2). Notice there is no Congo's news article here! I checked Congo's collection starts later than 2013. 
+
+Then I identified "Le Potentiel" is the leading daily newspaper in DR Congo. No news about the civil war in 2013. Only "La course à l'OIF - L'économie est au cÅ“ur des préoccupations des Etats [analysis]" that show up in both Nexis Unis and Newsbank. 
+
+On Nexis Unis, if I search the territory's name "Katanga" on Nexis Unis withiin the newspaper "Le Potentiel," 78 results show up. If I search "Katanga AND guerre," 17 results -- much better. Then we need to use google translation.
