@@ -40,5 +40,7 @@ On Nexis Unis, if I search the territory's name "Katanga" on Nexis Unis withiin 
 
 ## Meeting with Alyssa:
 UCDP Charts: https://ucdp.uu.se/downloads/charts/
+
 Foreign Broadcast Information Service (FBIS): https://www.library.illinois.edu/hpnl/blog/fbis/
+
 Summary of World Broadcasts: https://clinecenter.illinois.edu/project/data-science/global-news-index (can be accessed via UIUC library??)
