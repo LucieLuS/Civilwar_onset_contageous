@@ -36,3 +36,9 @@ Then I identified "Le Potentiel" is the leading daily newspaper in DR Congo. No 
 On Nexis Unis, if I search the territory's name "Katanga" on Nexis Unis withiin the newspaper "Le Potentiel," 78 results show up. If I search "Katanga AND guerre," 17 results -- much better. Then we need to use google translation.
 
 **Takeway**: Lanauge barrier is a thing -- we need to modify our keywords search. Nexis Unis has more complete collection, but we need to identify the leading journals of each country. Newsbank will return more local African news if we search the key terms, but the collection is not complete. 
+
+
+## Meeting with Alyssa:
+UCDP Charts: https://ucdp.uu.se/downloads/charts/
+Foreign Broadcast Information Service (FBIS): https://www.library.illinois.edu/hpnl/blog/fbis/
+Summary of World Broadcasts: https://clinecenter.illinois.edu/project/data-science/global-news-index (can be accessed via UIUC library??)
