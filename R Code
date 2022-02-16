@@ -1,0 +1,14 @@
+### Create the data set
+```{r setup, include=FALSE}
+africa_name <- read.csv("COW names.csv") %>%
+  filter(region == "Africa") %>%
+  select(ccode, country)
+year <- rep(c(1996:2004), 55)
+name_combination <- data.frame(africa_name$country,africa_name$country, year) %>%
+  rename(country = "africa_name.country", reported_country = "africa_name.country.1") %>%
+  expand(country, reported_country, year) %>%
+  filter(country != reported_country) 
+name_combination <- merge(name_combination, africa_name, by.x = "country")
+
+write.csv(name_combination, "data.csv")
+```
