@@ -44,3 +44,10 @@ UCDP Charts: https://ucdp.uu.se/downloads/charts/
 Foreign Broadcast Information Service (FBIS): https://www.library.illinois.edu/hpnl/blog/fbis/
 
 Summary of World Broadcasts: https://clinecenter.illinois.edu/project/data-science/global-news-index (can be accessed via UIUC library??)
+
+## Next steps:
+
+Back to the original plan. Use newspaper reports as pilot data.
+
+## Information about African countries!
+Ibrahim Index of African Governance: https://mo.ibrahim.foundation/iiag
