@@ -1,5 +1,11 @@
 # Civilwar_onset_contageous
 
+## Archer:
+
+### remember to change country name, date and key accordingly
+"https://archerapi.clinecenter.illinois.edu/select?q=content:(Algeria%20AND%20(%22civil%20war%22%20OR%20%22internal%20conflict%22%20OR%20%22internal%20war%22%20OR%20%22civil%20conflict%22)%20AND%20publication_date:[2015-05-20T00:00:00Z%20TO%202015-08-20T23:59:59Z])&rows=1000&fl=aid,publication_date,title,url,publisher,country,status,source_name&source_name:BulkLexisNexis%20OR%20BulkLexisNexis_v2&wt=csv&key=YOURKEYS"
+
+
 ## Civil war dataset:
 UCDP UCDP/PRIO Armed Conflict Dataset Codebook:  UCDP datasets have always relied on the 25 deaths in a calendar year threshold for inclusion in its datasets. A link to its codebook: chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/viewer.html?pdfurl=https%3A%2F%2Fucdp.uu.se%2Fdownloads%2Fucdpprio%2Fucdp-prio-acd-211.pdf&clen=292699&chunk=true
 
