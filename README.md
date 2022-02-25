@@ -55,5 +55,5 @@ Summary of World Broadcasts: https://clinecenter.illinois.edu/project/data-scien
 
 Back to the original plan. Use newspaper reports as pilot data.
 
-## Information about African countries!
+## Information about African countries:
 Ibrahim Index of African Governance: https://mo.ibrahim.foundation/iiag
