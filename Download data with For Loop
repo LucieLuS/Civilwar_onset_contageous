@@ -1,0 +1,27 @@
+```{r}
+library(rvest)
+library(tidyverse)
+library(lubridate)
+library(httr)
+library(jsonlite)
+
+############# Middle East #############
+
+middle <- read.csv("data_middlefrica.csv") %>% distinct(conflict_id, .keep_all = TRUE)
+## Insert %20 into country names with more than one string
+middle$country[middle$country=="Central African Republic"] <- "Central%20African%20Republic"
+middle$country[middle$country=="Democratic Republic of the Congo"] <- "Democratic%20Republic%20of%20the%20Congo"
+
+link_middle <- vector()
+for (i in 1:nrow(middle)) {
+  link_middle[i] <- paste("http://archerapi.clinecenter.illinois.edu/select?q=content:(",middle$country[i],"%20AND%20(%22civil%20war%22%20OR%20%22internal%20conflict%22%20OR%20%22internal%20war%22%20OR%20%22civil%20conflict%22)%20AND%20publication_date:%5B", middle$start_date2[i], "T00:00:00Z%20TO%20", as.Date(middle$start_date2[i]) %m+% months(3),"T23:59:59Z%5D)&rows=1000&fl=aid,publication_date,title,url,publisher,country,status,source_name&wt=csv&key=12312c60-0e45-421c-9eb6-9ce0cccdad48", sep="") ### change the API
+} 
+link_middle
+
+file <- list()
+# If there is error showing "Too many requests", separately try "for (i in 1:5){...}", "for (i in 5:10){...}", etc.
+for (i in 1:nrow(middle))  {
+  file[[i]] <- html_text(read_html(GET(link_middle[i])))
+  write(file[[i]], paste("id_", middle$conflict_id[i], ".csv", sep = ""))
+}
+```
