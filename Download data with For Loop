@@ -8,7 +8,7 @@ library(jsonlite)
 ############# Middle East #############
 
 middle <- read.csv("data_middlefrica.csv") %>% distinct(conflict_id, .keep_all = TRUE)
-## Insert %20 into country names with more than one string
+## Check which countries have more than one string, and insert %20 into the space between strings
 middle$country[middle$country=="Central African Republic"] <- "Central%20African%20Republic"
 middle$country[middle$country=="Democratic Republic of the Congo"] <- "Democratic%20Republic%20of%20the%20Congo"
 
