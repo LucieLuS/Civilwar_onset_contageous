@@ -19,9 +19,9 @@ for (i in 1:nrow(middle)) {
 link_middle
 
 file <- list()
-# If there is error showing "Too many requests", separately try "for (i in 1:5){...}", "for (i in 5:10){...}", etc.
 for (i in 1:nrow(middle))  {
   file[[i]] <- html_text(read_html(GET(link_middle[i])))
   write(file[[i]], paste("id_", middle$conflict_id[i], ".csv", sep = ""))
 }
+# If there is error showing "Too many requests", separately try "for (i in 1:5){...}", "for (i in 5:10){...}", etc.
 ```
