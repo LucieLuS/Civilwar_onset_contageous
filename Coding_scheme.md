@@ -9,4 +9,4 @@ news_relevance:
 news_country：
 - 国家名字
 - IO
-- 
+- AF
