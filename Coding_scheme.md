@@ -17,8 +17,12 @@ news_country：
 
 ### IO
 
+- International Crsis Group
+- The New Humanitarian
+
 
 ### AF
 - Inter Press Service (IPS)
 - African Arguments
 - AllAfrica
+- FrontPage Africa
