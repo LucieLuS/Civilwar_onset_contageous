@@ -16,6 +16,9 @@ news_country：
 ## 出现过的IO或AF
 
 ### IO
-- Inter Press Service (IPS)
+
 
 ### AF
+- Inter Press Service (IPS)
+- African Arguments
+- AllAfrica
