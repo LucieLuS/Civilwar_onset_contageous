@@ -1,6 +1,6 @@
-重复的或打不开网址的可以直接删除
+## 重复的或打不开网址的可以直接删除
 
-判断两个variables: news_relevance; news_country
+## 判断两个variables: news_relevance; news_country
 
 news_relevance: 
 - 0（不相关）
@@ -12,3 +12,10 @@ news_country：
 - 国家名字
 - IO
 - AF
+
+## 出现过的IO或AF
+
+### IO
+- Inter Press Service (IPS)
+
+### AF
