@@ -1,3 +1,5 @@
+重复的或打不开网址的可以直接删除
+
 判断两个variables: news_relevance; news_country
 
 news_relevance: 
