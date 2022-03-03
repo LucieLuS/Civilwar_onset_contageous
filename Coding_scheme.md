@@ -1,6 +1,8 @@
-## 重复的或打不开网址的可以直接删除
+## 可直接删掉的类型（给机器学习时）：
+- 没有标题和没有网址的
+- 外媒报道（bbc monitoring除外）
 
-## 判断两个variables: news_relevance; news_country
+## 判断三个variables: news_relevance; relevance_category; news_country
 
 news_relevance: 
 - 0（不相关）
