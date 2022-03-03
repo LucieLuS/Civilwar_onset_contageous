@@ -7,7 +7,7 @@
 
 news_relevance: 
 - 0（不相关）
-- 1（相关）
+- 1（相关): broadly defined
 
 relevance_category
 - 0（不相关）
