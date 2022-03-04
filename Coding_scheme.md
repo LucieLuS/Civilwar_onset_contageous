@@ -35,3 +35,4 @@ news_country：
 - AllAfrica
 - FrontPage Africa
 - Institute for Security Studies
+- MENAFN - The Middle East North Africa Financial Network
