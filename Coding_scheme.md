@@ -37,3 +37,4 @@ news_country：
 - Institute for Security Studies
 - MENAFN - The Middle East North Africa Financial Network
 - South African Institute of International Affairs
+- Reuters Africa
