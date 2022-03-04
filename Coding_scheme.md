@@ -34,3 +34,4 @@ news_country：
 - African Arguments
 - AllAfrica
 - FrontPage Africa
+- Institute for Security Studies
