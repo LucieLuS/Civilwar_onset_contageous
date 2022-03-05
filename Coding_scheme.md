@@ -27,6 +27,7 @@ news_country：
 
 - International Crsis Group
 - The New Humanitarian
+- Christian Science Monitor
 
 
 ### AF
