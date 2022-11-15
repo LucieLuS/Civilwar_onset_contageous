@@ -1,0 +1,322 @@
+---
+title: "Information for Inspirations: The Roles of Local News in Civil Conflict Diffusion"
+author: ["Lucie Lu","Tianhong Yin"]
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  bookdown::pdf_document2: 
+    toc: false
+classoption: fleqn
+fontfamily: mathpazo
+fontsize: 12pt
+bibliography: Contagious civil war.bib
+link-citations: yes
+linkcolor: blue
+header-includes:
+  - \usepackage{amsmath}
+  - \usepackage{setspace}
+  - \setlength{\mathindent}{15pt}
+  - \setlength\parindent{24pt}
+  - \setlength{\parskip}{0.0pt plus 1.0pt}
+  - \doublespacing
+  - \newtheorem{theorem}{Theorem}[section]
+  - \newtheorem{lemma}[theorem]{Lemma}
+  - \newtheorem{proposition}[theorem]{Proposition}
+  - \newtheorem{corollary}[theorem]{Corollary}
+  - \newenvironment{proof}[1][Proof]{\begin{trivlist}
+      \item[\hskip \labelsep {\bfseries Proof}]}{\end{trivlist}}
+  - \newenvironment{definition}[1][Definition]{\begin{trivlist}
+      \item[\hskip \labelsep {\bfseries 1}]}{\end{trivlist}}
+  - \newenvironment{example}[1][Example]{\begin{trivlist}
+      \item[\hskip \labelsep {\bfseries 1}]}{\end{trivlist}}
+  - \newenvironment{remark}[1][Remark]{\begin{trivlist}
+      \item[\hskip \labelsep {\bfseries 1}]}{\end{trivlist}}
+  - \newcommand{\qed}{\nobreak \ifvmode \relax \else
+      \ifdim\lastskip<1.5em \hskip-\lastskip
+      \hskip1.5em plus0em minus0.5em \fi \nobreak
+      \vrule height0.75em width0.5em depth0.25em\fi}
+  - \usepackage{wrapfig}
+  - \usepackage{float}
+  - \usepackage{indentfirst}
+  - \floatplacement{figure}{!t}
+  - \usepackage{caption}\captionsetup[table]{skip=5pt}
+  - \usepackage{dcolumn}
+  - \usepackage{rotating}
+  - \usepackage{caption}\DeclareCaptionLabelFormat{AppendixTables}{A.#2}
+
+abstract: "Existing studies show that civil wars are often contagious, due to tangible linkages between arm groups to deepen ongoing tension and transfer knowledge and resources in proximate states. We examine an under-studied mechanism to explain civil war contagion through an informational mechanism – news reporting. How does news reporting diffuse civil conflicts within the border of a given country? News articles inspire and inform would-be rebel groups so that groups in the same or neighboring cities are more prone to conflict onset. Using an original data collection and analysis of local news reports on a national broadcast in the Democratic Republic of Congo from 2010 to 2020, we find that more news coverage of lethal conflicts leads to more frequent conflict diffusion. The effects are most pronounced in the same or neighboring cities. This project sheds new light on understanding sources of civil war contagion by integrating research in civil war and communication studies where the news coverage as a source of information and inspiration can possibly conflict diffusion within a border."
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, warning = F, message = F)
+```
+
+
+```{r}
+
+library(tidyverse)
+library(dplyr)
+library(nnet) # for the multinom()-function
+library(MASS) # for the multivariate normal distribution
+library(MNLpred)
+# Plotting the predicted probabilities:
+library(ggplot2)
+theme_set(theme_classic())
+library(scales)
+#install.packages("ggsci")
+library(ggsci)
+```
+
+
+# Introduction
+
+
+Civil wars are often contagious.  The existence of a conflict is likely to render the outbreak of other conflicts in certain geographic areas. Historical examples are abundant: West Africa, the Balkans, and African Great Lakes, and the Caucasus have seen clustered conflicts among neighboring states within a specific region of the world [@forsberg_diffusion_2014].  Established literature in the civil conflict process demonstrates that diffusion exists: countries in proximity to states experiencing conflicts are more likely to become involved in a violent conflict [@hegre_sensitivity_2006; @braithwaite_geographic_2006; @salehyan_refugees_2006; @buhaug_contagion_2008]. A natural inquiry is to understand what makes violence particularly contagious, or how to resist the spread of violence. 
+
+*[existing explanations and gap]*
+
+Buhaug and Gleditsch [-@buhaug_contagion_2008] offer compelling evidence that civil conflicts cluster because conflicts are more likely to break out in poor and regime-transitioning countries[^1]-- and such state characteristics are likely to cluster. Other geopolitical attributes of conflict such as natural resource endowments also cluster, thereby providing further intuitive evidence that conflict clusters [@lujala_spoils_2010; @lujala_diamond_2005]. In addition to these underlying structural attributes, the flow of refugees and transnational ethnic ties can also explain cross-border conflict contagion [@salehyan_refugees_2006; @buhaug_contagion_2008].
+
+
+[^1]: Consistent with the famous inverted U-shaped curve between democracy and domestic violence, see @fein_more_1995, @francisco_repression_2005, @hegre_toward_2001].
+
+
+
+The clustering of the conflict suggests that the propensity of civil war is not determined merely by the domestic factors in individual countries. Contagious civil conflict is also by no means a unique phenomenon. We have seen the so-called “third waves” of democratization by the end of the 1990s where democracy expanded its footprint across the globe. Diffusion of democratic ideas and norms increases the likelihood of transition to democracy in neighboring countries [@gleditsch_diffusion_2006]. A more recent concern is the reverse wave of democratization: authoritarian diffusion [@ambrosio_constructing_2010]. Transition to democracy or autocracy in one country appears to affect those in another, and so do popular uprisings. Activists were emboldened by revolutions that happened in neighboring countries. The wave of protests across North Africa and the Middle East has brought technology, social media, and information transmission to the center to understand the diffusion of social movements across borders. Since then, numerous studies have looked at the way social media shape political change while recognizing the connections rest in a complex and contingent domestic political context [@howard_social_2012; @wolfsfeld_social_2013]. 
+
+
+Norms, ideas, and aspirations have made communicative processes and information transmission the key to understanding the diffusion of regime challenges.  Regime change diffusion and mobilization diffusion are special cases of the broader examination of the diffusion process.  Conflict diffusion also shares similar characteristics.  Underpinning these three well-studied diffusion processes is information transmission.  Information transmission requires a medium.  The role of media is inevitably important in setting the stage for norms and delivering information for learning.  This project integrates the well-established diffusion research, communication research, and civil conflict research to understand the role of local media in diffusing civil conflict.
+
+
+To conceptualize civil conflict diffusion, it is important to recognize that diffusion is a process by which one’s adoption of the practice alters the probability of its adoption of others [@ambrosio_constructing_2010; @elkins_waves_2005]. In this case, actors’ choices are often interdependent. To understand diffusion as a process, there involve at least two sets of actors – one is the initial source conflicting country and the other is a target country for potential diffusion [@forsberg_diffusion_2014].  This project holds the source conflicting country as given, and focuses on how makes the target countries more at risk of suffering an armed conflict as in the source country.  In other words, we mainly focus on the domestic side of a potential target country. 
+
+
+We ask: How does news reporting diffuse civil conflicts within the border of a given country? Numerous links between the source and the potential targets of diffusion can contribute to this process. Among them, information about the ongoing conflicts that easily travel across borders matters.  We look specifically at the target country’s news coverage of the conflict outbreak in the source country. The purpose of this project is to show that news reports serve as an important medium to convey information on conflicts to inspire and inform potential insurgents within the border of a country.
+
+
+# Why do Traditional Media Matter?
+
+In recent years, we have observed the roles that social media plays in sustaining and facilitating collective action.  Social media provides a movement with powerful, speedy, and low-cost tools for challengers recruitment and the distribution of information and images to mobilize for action (e.g., Bennett 2006, Wolfsfeld et al., 2013) [e.g., @bennett_one-step_2006; @wolfsfeld_social_2013]. However, while social media allows potential protesters to empower fellow citizens, it is only one channel of communication among many to document the ebbs and flows of internal conflict. 
+
+
+Traditional news media is as critical as social media in uprisings and conflicts onset in terms of conveying messages to the outside world.  Especially after the outbreak of protest or violence, news media follow, monitor and report the conflict events in a professional standard.  The proportion of the population who can view the battlegrounds is small.  Most people try to understand those conflicts through the political news written by journalists who can turn the perhaps most monotonous stories into exciting news.  When there is full of uncertainty, people turn to journalists in the case of war.  The renowned international news outlets such as Reuters, BBC, CNN are likely to report on the battleground. 
+
+
+For potential rebel groups in neighboring states that do not have first-hand experiences with the ongoing conflict, they always need a platform to receive information about the conflict to update their information. In this sense, news constitutes an important way for them to acquire information, learn lessons from the conflict, and decide on the best strategies and time to initiate a conflict. At the same time, in the information age, news serves as an important tool for spreading information, which can change or update people’s perceptions toward global and local issues.  Reports of civil wars in neighboring states can arouse people’s grievances toward the government or some social groups.  Hence, the original bystanders are more motivated to participate in rebellious activities or even escalate it into an internal conflict. 
+
+
+The news media are central arenas in political conflicts between the authority and the insurgents.  Newspapers and broadcasters around the world make the decision of reporting and the choice of frame to describe the events have a critical impact on observers.  Careful readers learn information about the emergence and escalation of conflict, and the interactions among rebel groups, government, and sometimes the third-party actor.  Also, reading news offers second-hand experiences for readers to construct understandings of what exists and what is essential, what is good and valuable, and what is bad and threatening.  Lippmann [-@lippmann_public_1922] argues that media provide compelling yet distorting descriptions of public worlds that people cannot directly experience and build ‘pseudo-environments’ in people’s minds.  Stories about conflict in one state may inspire other groups in another state to increase their own demands using violent means.  Although news coverage in and of itself cannot cause diffusion, it works as enabling a factor or medium, especially in a neighboring state that is more affected or triggered by conflict nearby.
+
+# Contagious Civil War: Four Existing Mechanisms
+
+Previous studies show that civil war can diffuse in four ways, including transnational ethnic ties, decreased opportunity costs of rebellion in neighboring states, refugee movement across borders, and the emulation of rebel groups in neighboring states.  All these mechanisms contribute to the outbreak of civil conflict in neighboring states by providing resources and information to citizens and groups in neighboring states, updating their opinion, and altering their expectations and incentives for considering a civil conflict.
+
+
+First, civil conflict tends to diffuse when armed groups have transnational ethnic ties to the population in neighboring states because the mobilization of group members in one state can change the prospects for mobilization by the same ethnic group in other countries, who are more likely to act on demonstration effects [@buhaug_contagion_2008; @forsberg_diffusion_2014].  Also, ethnic groups tend to change or update their opinion toward their government when an ethnic-based civil war is ongoing in a neighboring state [@kuran_ethnic_1988; @lake_spreading_1988].
+
+This usually increases their grievances toward the government, and dives people sharing the same ethnic ties to engage in protests and violence. Citizens from the same ethnic groups are more inspired to participate in civil conflict in their home country when they observe their kin groups nearby make progress towards their goals. 
+Second, civil wars usually lead to regional economic recessions by decreasing trade and investment in local regions [@murdoch_civil_2004]. This usually results in trade disruption and more concern by potential investors in the region, which leads to the economic spillover effect of civil war.  Economic downturn is found to increase the probability of civil war onset [@collier_greed_2004-1; @hegre_sensitivity_2006] because it decreases the opportunity cost and increases the incentives for rebellion by making it easier to get cheap military equipment and recruit mercenaries. The finding that state capacity, which involves economic and financial resources, mitigates the likelihood of conflict contagion also reflects the role of economy in civil war diffusion [@braithwaite_resisting_2010].  In this sense, economic turmoil caused by civil war in a state contributes to the spatial spillovers of civil war to the neighboring states. 
+
+Third, social unrest tends to occur when there are flows of refugees into a country [@salehyan_refugees_2006].  This process tends to exacerbate resource competition in the host countries, change local ethnic balances, and deepen citizens’ grievances toward the refugees.  The flow of refugees can also pose a threat to social stability because refugee camps are usually places for rebels from the state with civil conflict to reside.  This means more arms, more widespread conflict ideologies, more fighters brought to the host country, and thus a more potential threat to social instability, which makes civil conflict more likely to break out [@salehyan_refugees_2006].  The mechanism is also echoed in the logic of the post-conflict diffusion of civil conflict [@bara_legacies_2018].  After a civil war stops, there is a surplus of weapons, combatants, and rebel leaders.  The resources circulate in the region via the small arms trade and transnational rebel networks.  The risk of civil conflict increases when groups in the neighbors find it easier to establish an army against the government. 
+
+Fourth, civil conflict in one country can lead rebel groups in neighboring states to follow suit.  Violence in a state can provide rebel groups in neighboring states with information on the potential consequences of initiating a conflict.  Hence, rebel groups learn about proper strategies to challenge their government from the lessons of their neighboring peers [@danneman_contagious_2014]. This can lead potential rebel groups to emulate violence and increase the expectation of civil conflicts in neighboring states. Also, conflict in a state can drive groups in other states to increase their demands and pursue the demands in violent ways [@byman_iraqs_2008].  Information about civil wars is more available for neighbors than states far away from the warring state, thus making neighboring states more likely to experience domestic unrest and internal conflict. 
+
+These mechanisms are important in explaining how civil war might be geographically spread, but they do not address how the information about civil wars is spread when there are no formal ethnic links between rebel groups in proximate states. This explanation is especially needed for the last mechanism that civil war can lead groups in neighboring states to follow suit. 
+
+
+# Mechanisms and Expectations: Inspiration and Learning
+
+
+We use news media articles from neighboring states to identify sources of inspiration and information on ongoing conflicts.  Higher news coverage provides more information about the interactions of actors in the conflict for outsiders to learn the lesson.  For example, news frames that speak to grievances as the underlying causes of the conflict and choices of successful stories of the insurgents inspire rebel and civilian groups in a neighboring state to mobilize for rebellion.  In contrast, particular issue stances such as support for peace initiatives or discussion of negative externality of wars may de-mobilize readers in neighboring states to follow a similar path.
+
+## Inspirations
+
+Elkins and Simmons [-@elkins_waves_2005] identify two general mechanisms for a diffusion process: adaption to altered conditions and learning.  Generally speaking, adaptation to altered conditions refers to a situation where the value of a certain decision alters the value of that decision for others.  In the context of conflict diffusion, the negative annotation of war and violence needs to be framed to cover from criticism.  In this paper, we conceptualize the mechanism adaption to altered conditions as inspirations in the context of conflict diffusion.
+
+
+Previous studies show that different media choose different stories and frames to report the same the Israeli-Palestinian conflict [@baden_convergent_2017].  When looking at global coverage of the conflict, political and cultural proximity between the source conflict countries and potential target countries affect the choice of media frames to describe the conflict events in the target countries [@sheafer_relative_2014]. When examining the neighboring states’ media’s choices to describe the conflict, we expect to see there are variations in media frames and media coverage. News frames of internal conflict events go at least two directions: news frame aligning with the government or news frame aligning with the rebel group.  If the neighboring country builds a news frame in alignment with the rebel group, we hypothesize that the news stories are more likely to inspire observers to follow suit.
+
+
+If a violent conflict is rising in the neighboring state, one can imagine that groups in neighboring states in a similar situation may also perceive the benefits of challenging their governments using violent means.  Following a growing majority of other actors in the case of a negatively valenced practice – civil wars or conflicts, may cover from criticism [@elkins_waves_2005]. The emergence of a deviant act for a rebel group in one place consists of attempts to show that new norms or beliefs can emerge so the deviance is no longer perceived.
+
+
+This logic is particularly prominent for rebel groups to initiate a conflict and recruit citizens to participate in the arm groups against the incumbent government.  While a group may have grievances against the government, but it is a possibility to organize and recruit people to fight for a particular cause, there is little likelihood of launching a viable challenge.  The degree of grievances is a latent variable.  Many citizens are bystanders when deciding to participate in anti-regime activities.  In that case, the idea of “threshold” is important because the more people participate in taking up arms against the government, the higher value or lower risk it is for potential participants to join the rebellion group [@granovetter_threshold_1978]. 
+
+
+Altering the potential rebel groups’ and the bystanding citizens’ value of insurgency is contingent upon the news stories’ selection and frames.  The media are far from mirrors passively reflecting facts in the real world [@gitlin_whole_1980, p. 29].  Media are doing more than gathering and transmitting information on the battleground, but have immense effects on the trajectories of conflicts.  When conflicts happen, people are curious about the cause.  Hence, some conflicts are more legitimate than others.  When the internal conflict is framed as a response to the underlying grievances shared by the population, one can imagine when grievances are shared in other places, this event will act as a stimulus to the audiences.  Hence, the news selection and framing of conflict coverage have the potential to influence public opinion formation heavily.
+	
+	
+Entman [-@entman_projections_2004] distinguishes four framing functions: (1) problem definition, (2) attribution of responsibility, (3) moral evaluation, and (4) endorsing remedies or improvements. Each framing function is important to shape people’s perception of the conflict in the neighboring state.  We can map the four framing functions into two dimensions: whether the news frame treats the civil conflict as a source of inspiring new changes or denouncing it as the beginning of turmoils.  Journalists may attribute the cause of war to the government’s failures and citizens’ long-standing grievances, or in contrast, to the greedy rebel groups. News reports may also highlight the dark side of civil war: instability of the regime, the brutality of the armed group, refugee outflows, etc.  Or in turn, they may report the stories about how rebel groups build bases, recruit new members or reconnect with the villagers.  In sum, journalists’ choices of news frame and selection have a subtle impact on people’s perception of the conflict events.  
+
+
+In another situation, if the conflict is not salient enough or the regime tightly controls the media environment, journalists may not cover the conflict events or present both sides’ perspectives in full. Hence, there are no surges in public attention nor altered values of the conflict.
+
+
+Expectations from the inspiring mechanism are as follows: 
+
+> H1: Neighbor target countries that adopt pro-rebel group news frames in reporting ongoing conflicts are more susceptible to future conflicts.
+
+
+## Learning
+
+
+The second broad class of diffusion mechanism that Elkins and Simmons [-@elkins_waves_2005] identify is the exchange of information or, from the perspective of the potential rebel groups, learning.  News coverage provides information about such conditions, including the benefits and drawbacks of initiating conflicts and interacting with the government and other third-party actors in an ongoing process.  Potential rebel groups can form a prospective success likelihood of their own conflict.  Information about the interactions among actors in the conflicts, especially the successful stories of rebel groups in the news, increase the chance of initiating conflicts in another country. News reports supply information to potential rebel groups if and when to act.
+
+
+Rebel groups may pay more attention to some conflict interactions than others because they are more available or similar to theirs in terms of political context.  Potential rebel groups are likely to find relevant reference rebel groups to compare their group-level characteristics and state-level characteristics.  Group-level characteristics include their strength and capacity, arms collections, geographic base, and state-level characteristics include state capacity, political environments, relations with the U.S., etc.  Potential rebel groups then align their strategy with group-level and state-level proximate rebel groups in ongoing conflicts. 
+
+
+What kinds of information would potential rebel groups like to know?  As Walter [-@walter_information_2006] argues, the strategic environment in which the government and would-be rebel groups operate plays an important role in the group’s decision of initiating conflict.  They are interested in gathering information about the responses of the government being challenged and the third-party actors. The government in the neighboring country, at the same time, may also pay attention to the interactions between rebel groups and their respective government nearby. For example, the news may reveal critical juncture of the conflict events: at what point government begins to negotiate peace deals or grant concessions, or under what circumstances UN or other third-party actors will perform peace-keeping missions or facilitate peace negotiations. Observing the dynamics among actors in the neighboring states of course cannot perfectly predict how a government or third-party actor will respond in future fights. Although the inferences based on the information in proximal war are imperfect, there are lessons to learn from the interactions and successful stories to tell if the rebel groups in a similar situation achieve what they want. In short, rebel groups, or governments may look to interactions during the conflicts in a proximal state as a guide.
+
+
+Expectations from the learning mechanism are as follows: 
+
+> H2: The more news coverage of an ongoing conflict is available, the more information about the conflicts for would-be challengers to learn, and the more likely the rebel groups in the neighboring target country will initiate conflicts in the near future. 
+
+> H3: The more successful stories about the rebel groups are covered in the news, the more likely the rebel groups in the neighboring target country will initiate conflicts in the near future. 
+
+# Data and Methods
+
+# Results
+
+We have implemented two strategies to test the two hypotheses we propose. First, we examine whether news coverage of original lethal events leads to a higher frequency of conflict diffusion. We collapse our data set to the unique original lethal events (N = 70), and examine whether contagious conflicts are more likely to follow the original lethal events with news coverage. Radio Okapi broadcasts about 48\% of the original lethal events. To define contagious conflicts, we impose three criteria. First, the original and the contagious conflicts have to demonstrate temporal dependence. Contagious conflicts happen within a month of the breakout of the original event. Then, we examine whether the subsequent conflicts are performed by the same armed group. Finally, we leverage the geo-referenced information in UCDP GED and examine whether the location of the subsequent conflicts is the same city as the original conflict.
+
+Descriptively, we find:
+
+- Criteria 1: 91\% of the original lethal events are followed by conflicts performed by the *same actor*, in any city, within a month.
+- Criteria 2: 54\% of the original lethal events are followed by conflicts performed by any actor, in the *same city*, within a month.
+- Criteria 3: 47\% of the original lethal events are followed by conflicts performed by the *same actor*, in the *same city*, within a month.
+
+
+
+Since the three criteria are stricter from the top to the bottom, we can see a decrease of percentages of the subsequent events that fit those criteria. We also create new binary variables for three dependent variables of contagious conflicts: whether the original lethal conflict has any subsequent conflict by the same actor, in the same city, or by the same actor and in the same city. Our independent variable, `news coverage` of original lethal conflict is a binary one. We also construct a quartile variable for the number of deaths in the original lethal event. It is an important covariate, since the lethality of confclits affects both the propensity of the conflicts to be reported, as well the likelihood of potential spillover to other locations. 
+
+
+Table \@ref(tab:table1) shows that controlling for the numbers of deaths, the presence of news coverage has weak positive correlations[^2] with contagious events. All of the three estimates are statistically indifferent from 0. In other words, the estimates are obtained by chance. The positive coefficients from Model 1 and Model 3 only give suggestive evidence that news coverage of original events is positively related to the occurrences of contagious conflicts. It is possible that the observations are on the smaller end, so there is a lack of power to detect statistically significant relationship in the current setup. 
+
+[^2]: Except for Model 2 (the `same city` subsequent conflict as dependent variable), but the coefficient is statistically indistinguishable from 0).
+
+
+```{r, results='hide'}
+
+dat <- read_csv("https://raw.githubusercontent.com/LucieLuS/Civilwar_onset_contageous/main/conference_congo/DRC_coding_complete_all_3.csv")
+
+```
+
+```{r, results='hide'}
+#same actor
+contagious <- dat %>% group_by(id) %>% summarise_at(vars(by_actor), list(sum_same_actor = sum))
+
+#same geography same city same province
+contagious_1 <- dat %>% group_by(id) %>% summarise(sum_same_geo = sum(by_geography == 1))
+
+#stricter definition, 
+#same city, same actor for subsequent events
+contagious_2 <- dat %>% group_by(id) %>% summarise(sum_same_act_geo = sum(by_actor[by_geography == 1]))
+
+contagious_total <- dat %>% group_by(id) %>% summarise(sum_contag = length(id))
+
+
+report <- dat %>% group_by(id) %>% summarise_at(vars(report_binary), list(report = unique))
+deaths <- dat %>% group_by(id) %>% summarise_at(vars(best), list(deaths = unique))
+
+#merge
+analy <- merge(report, deaths, by = "id")
+analy <- merge(analy, contagious, by = "id")
+analy <- merge(analy, contagious_1, by = "id")
+analy <- merge(analy, contagious_2, by = "id")
+analy <- merge(analy, contagious_total, by = "id")
+
+#create binary variables
+analy$if_same_actor <- ifelse(analy$sum_same_actor==0, 0, 1)
+analy$if_same_geo <- ifelse(analy$sum_same_geo==0, 0, 1)
+analy$if_same_act_geo <- ifelse(analy$sum_same_act_geo==0, 0, 1)
+
+#new variable
+analy$per_same_act_geo <- analy$sum_same_act_geo/analy$sum_contag
+analy$per_same_act <- analy$sum_same_actor/analy$sum_contag
+```
+
+
+
+```{r, results='hide'}
+
+table(analy$report)
+# about half-half
+
+table(analy$if_same_actor) #91%
+# contagious events too many...
+
+table(analy$if_same_geo) #54%
+# contagious events are way more even in a stricter definition...
+
+table(analy$if_same_act_geo) #47%
+
+
+```
+
+
+```{r, results='hide'}
+# N = 70
+analy$quartile_deaths <- ntile(analy$deaths, 4)  
+
+lm1 <- lm(sum_same_actor ~ report + quartile_deaths, data = analy)
+summary(lm1)
+
+# all positive signs, but probably not enough power
+
+# binaryDV
+lm1_2 <- lm(if_same_actor ~ report + quartile_deaths, data = analy)
+summary(lm1_2)
+
+##################
+
+# stricter definition of contagious events
+lm2 <- lm(sum_same_geo ~ report + quartile_deaths, data = analy)
+summary(lm2)
+
+# binaryDV2
+lm2_2 <- lm(if_same_geo ~ report + quartile_deaths, data = analy)
+summary(lm2_2)
+
+###############
+#most strict
+
+lm3 <- lm(sum_same_act_geo ~ report + quartile_deaths, data = analy)
+summary(lm3)
+
+
+###############
+
+lm3_2 <- lm(if_same_act_geo ~ report + quartile_deaths, data = analy)
+summary(lm3_2)
+
+
+```
+
+```{r table1, results='asis', message=F, warning=F}
+#chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://cran.r-project.org/web/packages/stargazer/vignettes/stargazer.pdf
+#install.packages("stargazer") 
+library(stargazer)
+
+stargazer(lm1_2, lm2_2, lm3_2, title="Results from OLS Models",
+          dep.var.labels = c("Same actor", "Same city", "Same actor and city"),
+          covariate.labels = c("News coverage", "Deaths (quartile)", "Constant"),
+          label = "tab:table1",
+          align=TRUE, header=F)
+```
+
+
+```{r plot, fig.cap='Results from Multinomial Models', out.width="100%",fig.show='hold'}
+
+library(knitr)
+library(here)
+include_graphics(
+  here('two_plots.jpg'))
+
+```
+
+
+\clearpage
+
+# References
