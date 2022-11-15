@@ -1,0 +1,285 @@
+---
+title: "first_try_drc"
+author: "Lucie Lu"
+date: "2022-11-13"
+output: pdf_document
+---
+
+````{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r}
+
+library(tidyverse)
+library(dplyr)
+library(nnet) # for the multinom()-function
+library(MASS) # for the multivariate normal distribution
+library(MNLpred)
+# Plotting the predicted probabilities:
+library(ggplot2)
+theme_set(theme_classic())
+library(scales)
+#install.packages("ggsci")
+library(ggsci)
+```
+
+```{r}
+
+dat <- read_csv("https://raw.githubusercontent.com/LucieLuS/Civilwar_onset_contageous/main/conference_congo/DRC_coding_complete_all_3.csv")
+
+```
+
+
+```{r}
+
+#keep the complete cases
+#data2 <- data[complete.cases(data$id), ]
+
+# 70 unique original events
+unique(dat$id)
+
+dat$quartile_deaths <- ntile(dat$best, 4)  
+table(dat$by_geography)
+
+
+```
+
+```{r all the N}
+
+lm0 <- lm(by_geography ~ report_binary, data = dat)
+summary(lm0)
+
+lm0_1 <- lm(by_geography ~ report_binary + by_actor + best, data = dat)
+summary(lm0_1)
+
+lm0_2 <- lm(by_geography ~ report_binary * by_actor + quartile_deaths, data = dat)
+summary(lm0_2)
+
+```
+
+
+
+```{r}
+###multinomial
+
+lm_0_ml <- multinom(by_geography ~ report_binary + by_actor + best, data = dat, Hess=T)
+summary(lm_0_ml)
+
+lm_00_ml <- multinom(by_geography ~ report_binary, data = dat, Hess=T)
+summary(lm_00_ml)
+
+```
+
+```{r}
+
+pred1 <- mnl_pred_ova(model = lm_0_ml,
+                      data =  dat,
+                      x = "report_binary",
+                      by = 1,
+                      nsim = 100, # faster
+                      probs = c(0.025, 0.975)) # default
+
+pred1$plotdata
+
+```
+
+```{r}
+
+prob_multi <- ggplot(pred1$plotdata[c(1:4),], aes(x = factor(report_binary), 
+                              y = mean, color = factor(by_geography))) +
+  geom_line(aes(group=factor(by_geography))) +
+  geom_pointrange(aes(ymin = lower, ymax = upper), 
+                  width = 0.5) +
+#  geom_pointrange(aes(ymin = lower, ymax = upper)) +
+  #geom_hline(yintercept = 0) +
+  scale_y_continuous(labels = percent_format()) +
+  labs(y = "Predicted probabilities of subsequent conflicts \n by geographic proximity",
+       x = "Events-related News Reports"
+      ) + 
+  scale_x_discrete(labels= c("No News Report", "News Report")) +
+ # ggtitle("Correlations between Content Types of Trending Search and Comments") +
+ # scale_color_discrete(labels=c('Government positive','Others', 'Social negative')) +
+  scale_color_brewer(palette="Dark2") 
+ # theme_apa()
+
+prob_multi 
+
+```
+
+
+```{r}
+prob_multi2 <- ggplot(pred1$plotdata[c(5:8),], aes(x = factor(report_binary), 
+                              y = mean, color = factor(by_geography))) +
+  geom_line(aes(group=factor(by_geography))) +
+  geom_pointrange(aes(ymin = lower, ymax = upper), 
+                  width = 0.5) +
+#  geom_pointrange(aes(ymin = lower, ymax = upper)) +
+  #geom_hline(yintercept = 0) +
+  scale_y_continuous(labels = percent_format()) +
+  labs(y = "Predicted probabilities of subsequent conflicts \n by geographic proximity",
+       x = "Events-related News Reports"
+      ) + 
+  scale_x_discrete(labels= c("No News Report", "News Report")) +
+ # ggtitle("Correlations between Content Types of Trending Search and Comments") +
+ # scale_color_discrete(labels=c('Government positive','Others', 'Social negative')) +
+  scale_color_brewer(palette="Dark2") 
+ # theme_apa()
+
+prob_multi2 
+
+
+
+```
+
+```{r}
+
+library(ggpubr)
+ggarrange(prob_multi, prob_multi2 , widths = c(1,1),
+          ncol=1, nrow=2)
+
+ggsave("two_plots.jpg",  width = 24, height = 20, units = c("cm"), dpi=1000)
+
+
+```
+
+```{r}
+
+#same actor
+contagious <- dat %>% group_by(id) %>% summarise_at(vars(by_actor), list(sum_same_actor = sum))
+
+#same geography same city same province
+contagious_1 <- dat %>% group_by(id) %>% summarise(sum_same_geo = sum(by_geography == 1))
+
+#stricter definition, 
+#same city, same actor for subsequent events
+contagious_2 <- dat %>% group_by(id) %>% summarise(sum_same_act_geo = sum(by_actor[by_geography == 1]))
+
+contagious_total <- dat %>% group_by(id) %>% summarise(sum_contag = length(id))
+
+
+report <- dat %>% group_by(id) %>% summarise_at(vars(report_binary), list(report = unique))
+deaths <- dat %>% group_by(id) %>% summarise_at(vars(best), list(deaths = unique))
+
+#merge
+analy <- merge(report, deaths, by = "id")
+analy <- merge(analy, contagious, by = "id")
+analy <- merge(analy, contagious_1, by = "id")
+analy <- merge(analy, contagious_2, by = "id")
+analy <- merge(analy, contagious_total, by = "id")
+
+#create binary variables
+analy$if_same_actor <- ifelse(analy$sum_same_actor==0, 0, 1)
+analy$if_same_geo <- ifelse(analy$sum_same_geo==0, 0, 1)
+analy$if_same_act_geo <- ifelse(analy$sum_same_act_geo==0, 0, 1)
+
+#new variable
+analy$per_same_act_geo <- analy$sum_same_act_geo/analy$sum_contag
+analy$per_same_act <- analy$sum_same_actor/analy$sum_contag
+
+```
+
+```{r}
+
+table(analy$report)
+# about half-half
+
+table(analy$if_same_actor) #91%
+# contagious events too many...
+
+table(analy$if_same_geo) #54%
+# contagious events are way more even in a stricter definition...
+
+table(analy$if_same_act_geo) #47%
+
+
+```
+
+```{r}
+# N = 70
+lm1 <- lm(sum_same_actor ~ report, data = analy)
+summary(lm1)
+
+# all positive signs, but probably not enough power
+
+# binaryDV
+lm1_2 <- lm(if_same_actor ~ report, data = analy)
+summary(lm1_2)
+
+###################
+
+# stricter definition of contagious events
+lm2 <- lm(sum_same_geo ~ report, data = analy)
+summary(lm3)
+
+# binaryDV2
+lm2_2 <- lm(if_same_geo ~ report, data = analy)
+summary(lm2_2)
+
+###############
+#most strict
+
+lm3 <- lm(sum_same_act_geo~ report, data = analy)
+summary(lm3)
+
+
+lm3_2 <- lm(if_same_act_geo ~ report, data = analy)
+summary(lm3_2)
+
+###############
+analy$quartile_deaths <- ntile(analy$deaths, 4)  
+
+lm3_3 <- lm(if_same_act_geo ~ report + quartile_deaths, data = analy)
+summary(lm3_3)
+
+
+####
+#percentage
+lm4 <- lm(per_same_act_geo ~ report, data = analy)
+summary(lm4)
+
+lm4_2 <- lm(per_same_act ~ report, data = analy)
+summary(lm4_2)
+
+```
+
+
+```{r}
+
+#permutation test for a corrected p-value
+#https://towardsdatascience.com/permutation-test-in-r-77d551a9f891
+
+#tried both percentages or 1/0
+
+# Generating data
+set.seed(2021)
+treatment <- analy$report
+outcome <- analy$if_same_act_geo
+
+#Difference in means
+original <- diff(tapply(outcome, treatment, mean))
+mean(outcome[treatment==1])-mean(outcome[treatment==0])
+
+#Permutation test
+permutation.test <- function(treatment, outcome, n){
+  distribution=c()
+  result=0
+  for(i in 1:n){
+    distribution[i]=diff(by(outcome, sample(treatment, length(treatment), FALSE), mean))
+  }
+  result=sum(abs(distribution) >= abs(original))/(n)
+  return(list(result, distribution))
+}
+
+test1 <- permutation.test(treatment, outcome, 10000)
+hist(test1[[2]], breaks=50, col='grey', main="Permutation Distribution", las=1, xlab='')
+abline(v=original, lwd=3, col="red")
+
+test1[[1]]
+
+#Compare to t-test
+#t.test(outcome~treatment)
+
+```
