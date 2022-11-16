@@ -67,6 +67,11 @@ library(scales)
 library(ggsci)
 ```
 
+```{r, results='hide'}
+
+dat <- read_csv("https://raw.githubusercontent.com/LucieLuS/Civilwar_onset_contageous/main/conference_congo/DRC_coding_complete_all_3.csv")
+
+```
 
 # Introduction
 
@@ -177,31 +182,74 @@ Expectations from the learning mechanism are as follows:
 
 # Data and Methods
 
-# Results
+We test our hypotheses with data on local news reports from Radio Okapi, a national radio network in the Democratic Republic of the Congo (DRC), and the data on organized violence from UCDP Georeferenced Event Dataset (GED) as a source of contagious events from 2010 to 2020. For the first hypothesis, the sample size is 70 and the unit of analysis is original lethal event, defined as an organized violence with at least 25 deaths. UCDP GED provides three estimates for deaths for each event, including a low estimate, a best estimate and a high estimate. We use the best estimate as the reference, which is “the most reliable estimate of deaths identified in the source material” [@sundberg_introducing_2013; @davies_organized_2022; @stina_ucdp_2022, 5], and we get 70 original lethal events. For the second hypothesis, the sample size is 1167 and the unit of analysis is an original lethal event-contagious event dyad. 
 
-We have implemented two strategies to test the two hypotheses we propose. First, we examine whether news coverage of original lethal events leads to a higher frequency of conflict diffusion. We collapse our data set to the unique original lethal events (N = 70), and examine whether contagious conflicts are more likely to follow the original lethal events with news coverage. Radio Okapi broadcasts about 48\% of the original lethal events. To define contagious conflicts, we impose three criteria. First, the original and the contagious conflicts have to demonstrate temporal dependence. Contagious conflicts happen within a month of the breakout of the original event. Then, we examine whether the subsequent conflicts are performed by the same armed group. Finally, we leverage the geo-referenced information in UCDP GED and examine whether the location of the subsequent conflicts is the same city as the original conflict.
+## Dependent Variable
+
+Our dependent variable of interest is whether there is a contagious conflict after a lethal event occurs, and different measures are used for the two hypotheses. 
+
+Data on contagious events come from UCDP Georeferenced Event Dataset (GED), which documents organized violence in the post-1989 world, and an organized event refers to “an individual incident (phenomenon) of lethal violence occurring at a given time and place” [@sundberg_introducing_2013; @davies_organized_2022; @stina_ucdp_2022, 4]. To define contagious conflicts, we impose three criteria. First, the original and the contagious conflicts have to demonstrate temporal dependence. Contagious conflicts should happen within a month of the breakout of the original event. Then, we examine whether the subsequent conflicts are performed by the same armed group. Finally, we leverage the geo-referenced information in UCDP GED and examine whether the location of the subsequent conflicts is the same city as the original conflict. Any event that meets these criteria is defined as a contagious event regardless of the number of deaths. UCDP GED records the date when an event occurred as well as the event location, including the first order (largest) and the second order administrative divisions, which enables us to define contagious conflicts.
+
 
 Descriptively, we find:
 
-- Criteria 1: 91\% of the original lethal events are followed by conflicts performed by the *same actor*, in any city, within a month.
-- Criteria 2: 54\% of the original lethal events are followed by conflicts performed by any actor, in the *same city*, within a month.
-- Criteria 3: 47\% of the original lethal events are followed by conflicts performed by the *same actor*, in the *same city*, within a month.
+- 91\% of the original lethal events are followed by conflicts performed by the *same actor*, in any city, within a month (Criteria 1).
+- 47\% of the original lethal events are followed by conflicts performed by the *same actor*, in the *same city*, within a month (Criteria 2).
+
+Since these two criteria are stricter from top to bottom, we can see a decrease of percentages of the subsequent events that fit those criteria. We also create new binary variables for two dependent variables of contagious conflicts: whether the original lethal conflict has any subsequent conflict (1) by the same actor, or (2) by the same actor and in the same city.
 
 
 
-Since the three criteria are stricter from the top to the bottom, we can see a decrease of percentages of the subsequent events that fit those criteria. We also create new binary variables for three dependent variables of contagious conflicts: whether the original lethal conflict has any subsequent conflict by the same actor, in the same city, or by the same actor and in the same city. Our independent variable, `news coverage` of original lethal conflict is a binary one. We also construct a quartile variable for the number of deaths in the original lethal event. It is an important covariate, since the lethality of confclits affects both the propensity of the conflicts to be reported, as well the likelihood of potential spillover to other locations. 
-
-
-Table \@ref(tab:table1) shows that controlling for the numbers of deaths, the presence of news coverage has weak positive correlations[^2] with contagious events. All of the three estimates are statistically indifferent from 0. In other words, the estimates are obtained by chance. The positive coefficients from Model 1 and Model 3 only give suggestive evidence that news coverage of original events is positively related to the occurrences of contagious conflicts. It is possible that the observations are on the smaller end, so there is a lack of power to detect statistically significant relationship in the current setup. 
-
-[^2]: Except for Model 2 (the `same city` subsequent conflict as dependent variable), but the coefficient is statistically indistinguishable from 0).
-
-
-```{r, results='hide'}
-
-dat <- read_csv("https://raw.githubusercontent.com/LucieLuS/Civilwar_onset_contageous/main/conference_congo/DRC_coding_complete_all_3.csv")
+```{r}
+geo <- as.data.frame(table(dat$by_geography))
+geo$name <- c("Same city[1]", "Different City of \nthe Same Province[2]",
+              "Contiguous Province[3]", "Other Provinces[4]")
+geo$name <- as.factor(geo$name)
+geo$name <- ordered(geo$name, levels = c("Same city[1]", "Different City of \nthe Same Province[2]", "Contiguous Province[3]", "Other Provinces[4]"))
 
 ```
+
+```{r barplot1, fig.cap='Distribution of the count of subequent conflicts in each of the four region categories', out.width="100%",fig.show='hold'}
+
+library(ggplot2)
+# Basic barplot
+p <- ggplot(data = geo, aes(x=reorder(geo$name, geo$name), y=Freq)) + geom_bar(stat="identity") + labs(x="")
+p 
+#, fill="steelblue"
+
+```
+
+For the second hypothesis on whether news coverage of original lethal events leads to a higher probability of subsequent conflicts in proximate regions, we create a categorical variable that measures geographical proximity as the dependent variable. It is coded as the follows:
+
+- 1 if a subsequent conflict breaks out in the same city within a month; 
+- 2 if a subsequent conflict breaks out in a different city of the same province;
+- 3 if a subsequent conflict breaks out in a contiguous province; and 
+- 4 if a subsequent conflict breaks out in other provinces of the country.
+
+Figure \@ref(fig:barplot1) displays the count of subsequent conflicts in each of the region categories. Contiguous provinces have the largest number of subsequent conflicts in one month after an original conflict occurs, followed by a different city of the same province, other provinces and the same city of the same province.
+
+
+
+## Independent Variable
+
+Our independent variable is a binary variable, which describes whether there is news coverage of an original lethal conflict. To get news information, we scraped news texts from Radio Okapi, a national radio network in DRC, which was created under the United Nations Security Council Resolution 1201 of 24 February 2000 and is visited by more than 2 million internet users a month (MONUSCO). It provides news in French as well as four national languages of Congo to the whole country and was credited as “one of Africa’s most admirably independent radio services” (The Economist 2011). With its locality and popularity, Radio Okapi is supposed to be a valid news source that provides information on conflicts within the country.
+
+
+The website of Radio Okapi includes several different news category sections, such as politics, economy, security, and so on. We focus on the security category and scrap the titles, publish date, tags and contents of news articles in this category. The news are reported in French, and we employ language translation in Python using Googletrans library, which makes a call to Google Translate API to detect languages and translate texts. From the website, we retrieved news information for 764 news articles in total from 2010 to 2020. Using the 70 original lethal events we detected, we examine news articles within one month after an original lethal event breaks out and code the binary variable 1 if an original lethal event is reported within one month. We find that Radio Okapi broadcasts about 48\% of the original lethal events in our data set. 
+
+
+# Results
+
+We have implemented two strategies to test the two hypotheses we propose. First, we examine whether news coverage of original lethal events leads to a higher frequency of conflict diffusion. We collapse our data set to the unique original lethal events (N = 70), and examine whether contagious conflicts are more likely to follow the original lethal events with news coverage. 
+
+
+Our independent variable, news coverage of original lethal conflict is a binary one. Our two dependent variables are binary variables of two versions of contagious conflicts. Both restrict the actors of the subsequent conflicts as the same actors of the original conflict, while one has no restriction on geographic proximity, and the other restricts our attention to the same city of the same province. We also construct a quartile variable for the number of deaths in the original lethal event. It is an important covariate, since the fatality of conflicts affects both the propensity of the conflicts to be reported, as well the likelihood of potential spillover to other locations. 
+
+
+Table \@ref(tab:table1) shows that controlling for the numbers of deaths, the presence of news coverage has weak positive correlations with subsequent contagious events. The positive coefficients of `News Coverage` from Model 1 and Model 2 only give suggestive evidence that news coverage of original events is positively related to the occurrences of contagious conflicts. From Model 2, we can see if an original event is reported, there is an increase of 13.7\% higher chances of observing a subsequent contagious events broken out by the same actors in the same city. However, the coefficients are statistically indifferent from 0. In other words, the estimates could be obtained by chance. It is possible that the observations are on the smaller end, so there is a lack of power to detect statistically significant relationships in the current setup. 
+
+
+
 
 ```{r, results='hide'}
 #same actor
@@ -299,22 +347,43 @@ summary(lm3_2)
 #install.packages("stargazer") 
 library(stargazer)
 
-stargazer(lm1_2, lm2_2, lm3_2, title="Results from OLS Models",
-          dep.var.labels = c("Same actor", "Same city", "Same actor and city"),
+stargazer(lm1_2, lm3_2, title="Results from OLS Models",
+          dep.var.labels = c("Same actor", "Same actor and city"),
           covariate.labels = c("News coverage", "Deaths (quartile)", "Constant"),
           label = "tab:table1",
           align=TRUE, header=F)
 ```
 
 
-```{r plot, fig.cap='Results from Multinomial Models', out.width="100%",fig.show='hold'}
+
+For the second hypothesis, given the dependent variable as a categorical variable with multiple levels, we apply the multinomial probit model. This model imposes no assumptions about the ordering of alternative outcomes and can be used to examine the relationships on different levels. We convert the data set back to the unit of analysis as pairs of original lethal event--contagious event dyad, with the numbers of observations as 1167 pairs. In this analysis, we expect that there are more contagious events as the original events are covered by the news reports, and such effects are strongest in proximate areas. In other words, the inspiring effects are strongest in contagious events occurred in the same city, followed by different city of he same province, contiguous provinces and other provinces.
+
+```{r plotmarginal, fig.cap='Marginal Effects from Multinomial Probit Model', out.width="100%",fig.show='hold'}
 
 library(knitr)
 library(here)
 include_graphics(
-  here('two_plots.jpg'))
+  here('marginal.jpg'))
 
 ```
+
+
+```{r sameactor, fig.cap='Predicted Probabilities of Events Occurences from Multinomial Probit Model, A Subset of the Subsequent Conflicts with the Same Actor Only', out.width="100%", fig.show='hold'}
+
+include_graphics(
+  here('same_actor.jpg'))
+
+```
+
+In the multinomial probit model, we control for the actor of the subsequent conflicts and the fatality of the original conflict. Figure \@ref(fig:plotmarginal) shows strong support for hypothesis 2. The presence of news coverage increases the likelihood of observing the subsequent conflicts occurring in the same city as the original lethal events by 7\%. When we look at the subsequent conflicts occurring in different cities of the same province, the effect of news coverage is about an increase of 4\%. However, the effects of news coverage become negative when the subsequent conflicts occur in contiguous provinces or other provinces of the country. In other words, we are less likely to observe subsequent conflicts occurring outside of the same province of the original lethal event when the event is covered by the news.
+
+
+
+We then only examine the subset of subsequent conflicts that fit the more lenient definition of contagious conflicts. We focus on the subsequent conflicts initiated by the same actor as the original lethal events. Figure \@ref(fig:sameactor) shows the same pattern holds: positive effects of news coverage in proximate conflict areas (within the same province), but negative effects in conflicts occurred outside of the province. 
+
+
+
+# Discussion
 
 
 \clearpage
