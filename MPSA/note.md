@@ -9,3 +9,8 @@
 - Refine: side_a limited to "Government of DR Congo (Zaire)": N = 1554.
 
 - Refine: put death threashold: death >= 25: N = 85
+
+2. Steps to work on variables in DRC_coding_040223
+
+- Find 15 new events `original_UCDP_DRC_08_21_gov_d25` in 2008,2009,2021. Add them on the spreadsheet (notice the columns don't match).
+- Then we need to go back to the `original_UCDP_DRC_08_21_gov` to find contagious events.
